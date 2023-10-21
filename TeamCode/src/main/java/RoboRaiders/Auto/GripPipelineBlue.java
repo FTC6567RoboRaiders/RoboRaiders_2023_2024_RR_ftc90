@@ -117,7 +117,7 @@ public class GripPipelineBlue {
 	 * @param hue The min and max hue
 	 * @param sat The min and max saturation
 	 * @param val The min and max value
-	 * @param output The image in which to store the output.
+	 * @param out The image in which to store the output.
 	 */
 	private void hsvThreshold(Mat input, double[] hue, double[] sat, double[] val,
 	    Mat out) {
@@ -153,12 +153,12 @@ public class GripPipelineBlue {
 	/**
 	 * Sets the values of pixels in a binary image to their distance to the nearest black pixel.
 	 * @param input The image on which to perform the Distance Transform.
-	 * @param type The Transform.
-	 * @param maskSize the size of the mask.
-	 * @param output The image in which to store the output.
+	 * @param externalOnly The Transform. used to be "type"
+	 * @param contours the size of the mask. used to be "maskSize"
+	 * @param out The image in which to store the output. added "out" to findContours
 	 */
 	private void findContours(Mat input, boolean externalOnly,
-		List<MatOfPoint> contours) {
+		List<MatOfPoint> contours, Mat out) {
 		Mat hierarchy = new Mat();
 		contours.clear();
 		int mode;
@@ -182,8 +182,8 @@ public class GripPipelineBlue {
 	 * @param minWidth minimum width of a contour
 	 * @param maxWidth maximum width
 	 * @param minHeight minimum height
-	 * @param maxHeight maximimum height
-	 * @param Solidity the minimum and maximum solidity of a contour
+	 * @param maxHeight maximum height
+	 * @param solidity the minimum and maximum solidity of a contour
 	 * @param minVertexCount minimum vertex Count of the contours
 	 * @param maxVertexCount maximum vertex Count
 	 * @param minRatio minimum ratio of width to height
