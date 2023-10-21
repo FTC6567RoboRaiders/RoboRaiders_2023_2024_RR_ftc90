@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 import org.opencv.core.*;
 import org.opencv.core.Core.*;
-import org.opencv.features2d.FeatureDetector;
+
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.*;
 import org.opencv.objdetect.*;
@@ -27,7 +27,7 @@ public class GripPipelineBlue {
 
 	//Outputs
 	private Mat hsvThresholdOutput = new Mat();
-	private Mat cvErodeOutput = new Mat();
+
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 	private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
 
@@ -46,17 +46,9 @@ public class GripPipelineBlue {
 		double[] hsvThresholdValue = {100.71614583333334, 255.0};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
-		// Step CV_erode0:
-		Mat cvErodeSrc = hsvThresholdOutput;
-		Mat cvErodeKernel = new Mat(edu.wpi.grip.core.MatWrapper@13ab0bc);
-		Point cvErodeAnchor = new Point(-1, -1);
-		double cvErodeIterations = 6.0;
-		int cvErodeBordertype = Core.BORDER_CONSTANT;
-		Scalar cvErodeBordervalue = new Scalar(-1);
-		cvErode(cvErodeSrc, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBordertype, cvErodeBordervalue, cvErodeOutput);
 
 		// Step Find_Contours0:
-		Mat findContoursInput = cvErodeOutput;
+		Mat findContoursInput = hsvThresholdOutput;
 		boolean findContoursExternalOnly = false;
 		findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
 
@@ -89,9 +81,6 @@ public class GripPipelineBlue {
 	 * This method is a generated getter for the output of a CV_erode.
 	 * @return Mat output from CV_erode.
 	 */
-	public Mat cvErodeOutput() {
-		return cvErodeOutput;
-	}
 
 	/**
 	 * This method is a generated getter for the output of a Find_Contours.
@@ -155,10 +144,9 @@ public class GripPipelineBlue {
 	 * @param input The image on which to perform the Distance Transform.
 	 * @param externalOnly The Transform. used to be "type"
 	 * @param contours the size of the mask. used to be "maskSize"
-	 * @param out The image in which to store the output. added "out" to findContours
 	 */
 	private void findContours(Mat input, boolean externalOnly,
-		List<MatOfPoint> contours, Mat out) {
+		List<MatOfPoint> contours) {
 		Mat hierarchy = new Mat();
 		contours.clear();
 		int mode;
